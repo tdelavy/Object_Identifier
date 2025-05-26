@@ -24,6 +24,8 @@ def create_session():
 
     response = requests.post("https://api.openai.com/v1/realtime/sessions", headers=headers, json=data)
     session = response.json()
+    
+    print("DEBUG OpenAI session response:", session)  # ✅ ADD THIS
 
     return {
         "client": {
