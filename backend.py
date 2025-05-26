@@ -57,7 +57,7 @@ async def send_offer(request: Request):
         }
     }
 
-    res = requests.patch(
+    res = requests.post(
         f"https://api.openai.com/v1/realtime/sessions/{session_id}/client",
         headers=patch_headers,
         json=patch_data
