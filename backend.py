@@ -29,41 +29,6 @@ def create_session():
 
     return {
         "client": {
-            "token": session["client_secret"]["value"],
-            "session_id": session["id"]
+            "token": session["client_secret"]["value"]
         }
     }
-
-@app.post("/client-offer")
-async def send_offer(request: Request):
-    body = await request.json()
-    session_id = body["session_id"]
-    token = body["token"]
-    sdp = body["sdp"]
-
-    print(f"📡 PATCHING to OpenAI for session {session_id}")
-
-    patch_headers = {
-        "Authorization": f"Bearer {os.environ['OPENAI_API_KEY']}",
-        "Content-Type": "application/json",
-        "OpenAI-Beta": "realtime=v1",
-        "OpenAI-Client-Secret": token
-    }
-
-    patch_data = {
-        "offer": {
-            "type": "offer",
-            "sdp": sdp
-        }
-    }
-
-    res = requests.post(
-        f"https://api.openai.com/v1/realtime/sessions/{session_id}/client",
-        headers=patch_headers,
-        json=patch_data
-    )
-    
-    print("🔁 PATCH response status:", res.status_code)
-    print("🔁 PATCH response body:", res.text)
-
-    return res.json()
