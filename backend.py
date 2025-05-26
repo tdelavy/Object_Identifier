@@ -41,6 +41,8 @@ async def send_offer(request: Request):
     token = body["token"]
     sdp = body["sdp"]
 
+    print(f"📡 PATCHING to OpenAI for session {session_id}")
+
     patch_headers = {
         "Authorization": f"Bearer {os.environ['OPENAI_API_KEY']}",
         "Content-Type": "application/json",
@@ -55,6 +57,13 @@ async def send_offer(request: Request):
         }
     }
 
-    res = requests.patch(f"https://api.openai.com/v1/realtime/sessions/{session_id}/client",
-                         headers=patch_headers, json=patch_data)
+    res = requests.patch(
+        f"https://api.openai.com/v1/realtime/sessions/{session_id}/client",
+        headers=patch_headers,
+        json=patch_data
+    )
+    
+    print("🔁 PATCH response status:", res.status_code)
+    print("🔁 PATCH response body:", res.text)
+
     return res.json()
